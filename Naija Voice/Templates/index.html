@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>NaijaVoice | Text to Speech</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        padding: 35px 16px;
+        font-family: Arial, sans-serif;
+        background:
+            radial-gradient(circle at top left, #174b37, transparent 45%),
+            #08120e;
+        color: #f5f7f5;
+    }
+
+    .container {
+        max-width: 760px;
+        margin: auto;
+    }
+
+    .brand {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .logo {
+        display: inline-flex;
+        width: 65px;
+        height: 65px;
+        align-items: center;
+        justify-content: center;
+        background: #a7f36a;
+        color: #102016;
+        border-radius: 20px;
+        font-size: 30px;
+        font-weight: bold;
+        box-shadow: 0 0 35px #a7f36a25;
+    }
+
+    h1 {
+        margin: 17px 0 8px;
+        font-size: clamp(30px, 6vw, 43px);
+        letter-spacing: -1.5px;
+    }
+
+    h1 span {
+        color: #a7f36a;
+    }
+
+    .subtitle {
+        color: #a4b4aa;
+        line-height: 1.6;
+    }
+
+    .card {
+        padding: 26px;
+        border: 1px solid #293a30;
+        border-radius: 22px;
+        background: #101d16;
+        box-shadow: 0 20px 60px #00000030;
+    }
+
+    label {
+        display: block;
+        margin: 20px 0 10px;
+        color: #e1e9e3;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    textarea {
+        display: block;
+        width: 100%;
+        min-height: 190px;
+        resize: vertical;
+        padding: 17px;
+        border: 1px solid #35483b;
+        border-radius: 13px;
+        outline: none;
+        background: #09120d;
+        color: white;
+        font: inherit;
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    textarea:focus,
+    select:focus,
+    input:focus {
+        border-color: #a7f36a;
+    }
+
+    .counter {
+        text-align: right;
+        margin-top: 8px;
+        color: #91a397;
+        font-size: 12px;
+    }
+
+    .settings {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    select {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid #35483b;
+        border-radius: 10px;
+        background: #09120d;
+        color: white;
+        outline: none;
+    }
+
+    .range-heading {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 13px;
+    }
+
+    .range-heading span {
+        color: #a7f36a;
+    }
+
+    input[type="range"] {
+        width: 100%;
+        accent-color: #a7f36a;
+        cursor: pointer;
+    }
+
+    button,
+    .download {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 18px;
+        border: 0;
+        border-radius: 11px;
+        font-size: 14px;
+        font-weight: bold;
+        text-decoration: none;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .generate {
+        width: 100%;
+        margin-top: 27px;
+        background: #a7f36a;
+        color: #102016;
+    }
+
+    button:hover,
+    .download:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.06);
+    }
+
+    button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+        transform: none;
+    }
+
+    .result {
+        display: none;
+        margin-top: 24px;
+        padding: 20px;
+        border: 1px solid #35483b;
+        border-radius: 14px;
+        background: #09120d;
+    }
+
+    audio {
+        display: block;
+        width: 100%;
+        margin: 18px 0;
+    }
+
+    .download {
+        background: #20372a;
+        color: #c7ffab;
+        border: 1px solid #3a5a43;
+    }
+
+    .status {
+        margin-top: 18px;
+        color: #b8c7bc;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .hint {
+        margin-top: 22px;
+        padding: 15px;
+        border-radius: 12px;
+        background: #1b2b20;
+        color: #b9cabb;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    footer {
+        text-align: center;
+        margin-top: 25px;
+        color: #7f9285;
+        font-size: 12px;
+    }
+
+    @media (max-width: 550px) {
+        .card {
+            padding: 19px;
+        }
+
+        .settings {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+    <main class="container">
+
+```
+    <header class="brand">
+        <div class="logo">N</div>
+
+        <h1>Naija<span>Voice.</span></h1>
+
+        <p class="subtitle">
+            Your words. A Nigerian voice.<br>
+            Turn text into downloadable speech.
+        </p>
+    </header>
+
+    <section class="card">
+
+        <label for="text">
+            YOUR SCRIPT
+        </label>
+
+        <textarea
+            id="text"
+            maxlength="5000"
+            placeholder="Type your script here...
+```
+
+Example: My people, how una dey? Welcome back. Today, we get something special for una."
+></textarea>
+
+```
+        <div class="counter">
+            <span id="count">0</span> / 5000 characters
+        </div>
+
+        <div class="settings">
+
+            <div>
+                <label for="gender">VOICE</label>
+
+                <select id="gender">
+                    <option value="male">
+                        Nigerian Male — Abeo
+                    </option>
+
+                    <option value="female">
+                        Nigerian Female — Ezinne
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="rate">SPEAKING SPEED</label>
+
+                <div class="range-heading">
+                    <span>Slow</span>
+                    <span id="rateValue">0%</span>
+                    <span>Fast</span>
+                </div>
+
+                <input
+                    id="rate"
+                    type="range"
+                    min="-30"
+                    max="30"
+                    value="-5"
+                >
+            </div>
+
+            <div>
+                <label for="pitch">VOICE DEPTH</label>
+
+                <div class="range-heading">
+                    <span>Deeper</span>
+                    <span id="pitchValue">-15 Hz</span>
+                    <span>Higher</span>
+                </div>
+
+                <input
+                    id="pitch"
+                    type="range"
+                    min="-30"
+                    max="20"
+                    value="-15"
+                >
+            </div>
+
+        </div>
+
+        <button class="generate" id="generate">
+            ✦ Generate Nigerian Voice
+        </button>
+
+        <div class="status" id="status" role="status">
+            Ready when you are.
+        </div>
+
+        <div class="result" id="result">
+
+            <strong>Your voice is ready.</strong>
+
+            <audio id="audio" controls></audio>
+
+            <a
+                id="download"
+                class="download"
+                href="#"
+                download="naijavoice.mp3"
+            >
+                ↓ Download MP3
+            </a>
+
+        </div>
+
+        <div class="hint">
+            <strong>💡 Tip for natural speech:</strong>
+            Write the way you want the voice to speak.
+            Use commas for short pauses and full stops
+            for longer pauses. You can also type Nigerian
+            Pidgin, although pronunciation may vary.
+        </div>
+
+    </section>
+
+    <footer>
+        NaijaVoice · Made for your voice projects
+    </footer>
+
+</main>
+
+<script>
+    const textInput = document.getElementById("text");
+    const count = document.getElementById("count");
+    const rate = document.getElementById("rate");
+    const pitch = document.getElementById("pitch");
+    const rateValue = document.getElementById("rateValue");
+    const pitchValue = document.getElementById("pitchValue");
+    const generateButton = document.getElementById("generate");
+    const status = document.getElementById("status");
+    const result = document.getElementById("result");
+    const audio = document.getElementById("audio");
+    const download = document.getElementById("download");
+
+    textInput.addEventListener("input", () => {
+        count.textContent = textInput.value.length;
+    });
+
+    rate.addEventListener("input", () => {
+        const value = Number(rate.value);
+        rateValue.textContent =
+            `${value > 0 ? "+" : ""}${value}%`;
+    });
+
+    pitch.addEventListener("input", () => {
+        pitchValue.textContent = `${pitch.value} Hz`;
+    });
+
+    generateButton.addEventListener("click", async () => {
+        const text = textInput.value.trim();
+
+        if (!text) {
+            status.textContent = "Please enter your script first.";
+            textInput.focus();
+            return;
+        }
+
+        generateButton.disabled = true;
+        generateButton.textContent = "Generating your voice...";
+        status.textContent =
+            "Please wait. Your speech is being created.";
+        result.style.display = "none";
+
+        try {
+            const response = await fetch("/generate", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    text: text,
+                    gender: document.getElementById("gender").value,
+                    rate: rate.value,
+                    pitch: pitch.value
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(
+                    data.error || "Something went wrong."
+                );
+            }
+
+            audio.src = data.audio_url;
+            download.href = data.audio_url;
+            download.download = "naijavoice.mp3";
+
+            result.style.display = "block";
+            status.textContent =
+                "Success! Listen to your speech or download it.";
+
+            audio.load();
+
+        } catch (error) {
+            status.textContent = error.message;
+        } finally {
+            generateButton.disabled = false;
+            generateButton.textContent =
+                "✦ Generate Nigerian Voice";
+        }
+    });
+</script>
+```
+
+</body>
+</html>
